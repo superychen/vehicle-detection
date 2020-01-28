@@ -15,6 +15,10 @@ module.exports = {
   entry: {
     app: './src/main.js'
   },
+  //引入百度地图的api
+  externals:{
+    'BMap': 'BMap'
+  },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',

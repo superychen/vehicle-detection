@@ -21,7 +21,7 @@
     }),
     methods: {
       //初始化用户注册图表
-      initChartRegister() {
+      initChartRegister(xAisData,series) {
         this.chart = this.$echarts.init(this.$refs.myEchart);
         this.chart.setOption({
           backgroundColor: "#eee",
@@ -39,13 +39,13 @@
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: ['一', '二', '三', '四', '五', '六']
+            data: xAisData
           },
           yAxis: {
             type: 'value'
           },
           series: [{
-            data: [820, 932, 901, 934, 1290, 1330],
+            data: series,
             type: 'line',
             areaStyle: {},
             center: ["50%", "50%"],
@@ -54,7 +54,7 @@
         this.chart.resize();
       },
       //初始化用户浏览网站次数,用户预约车辆检测次数,用户点赞次数
-      initUserChart() {
+      initUserChart(xAisData,lookWebsiteSeries,vehicleSeries,websiteLikedCount) {
         this.userNumChart = this.$echarts.init(this.$refs.myEchart2);
         this.userNumChart.setOption({
           backgroundColor: "#eee",
@@ -70,7 +70,7 @@
             trigger: 'axis'
           },
           legend: {
-            data: ['用户浏览网站次数', 'Step Middle', 'Step End']
+            data: ['用户浏览网站次数', '车辆检测数', '点赞数']
           },
           grid: {
             left: '3%',
@@ -85,7 +85,7 @@
           },
           xAxis: {
             type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: xAisData,
           },
           yAxis: {
             type: 'value'
@@ -95,30 +95,53 @@
               name: '用户浏览网站次数',
               type: 'line',
               step: 'start',
-              data: [120, 132, 101, 134, 90, 230, 210]
+              data: lookWebsiteSeries,
             },
             {
-              name: 'Step Middle',
+              name: '车辆检测数',
               type: 'line',
               step: 'middle',
-              data: [220, 282, 201, 234, 290, 430, 410]
+              data: vehicleSeries,
             },
             {
-              name: 'Step End',
+              name: '点赞数',
               type: 'line',
               step: 'end',
-              data: [450, 432, 401, 454, 590, 530, 510]
+              data: websiteLikedCount
             }
           ],
         });
         this.userNumChart.resize();
+      },
+      //初始化用户所有数据
+      userRegisterCount() {
+        this.$axios.get('apis/login-sms/website/registe').then(res => {
+          let xAisData = res.data.data.map(obj => {
+            return obj.websiteMonth.substring(0,7)
+          });
+          let series  = res.data.data.map(obj => {
+            return obj.userRegisterCount;
+          });
+          let lookWebsiteSeries = res.data.data.map(obj => {
+            return obj.websiteLook;
+          });
+          let vehicleSeries = res.data.data.map(obj => {
+            return obj.websiteVehicleAppoint;
+          });
+          let websiteLikedCount = res.data.data.map(obj => {
+            return obj.websiteLikedCount;
+          });
+          this.initChartRegister(xAisData,series);
+          this.initUserChart(xAisData,lookWebsiteSeries,vehicleSeries,websiteLikedCount);
+        }).catch(err => {
+          console.log(err);
+        });
       }
-
     },
     mounted() {
-      this.initChartRegister();
-      this.initUserChart();
-    }
+      this.userRegisterCount();
+
+    },
   }
 </script>
 

@@ -40,8 +40,8 @@
       </v-row>
     </v-col>
     <v-col class="left_appointment ml-lg-5" :cols="12" md="5" lg="5" sm="5">
-      <div id="fast_appointment" class="fast_appointment mx-auto" >立即预约</div>
-      <app-appoint></app-appoint>
+      <div id="fast_appointment" class="fast_appointment mx-auto" @click="fastAppoint">立即预约</div>
+      <app-appoint :appointStatus="appointStatus" @close-dialog="closeDia"></app-appoint>
       <v-row class="mt-5 ml-md-1 ml-lg-1">
         <app_btn appBtnTitle="工作流程" color="#1E88E5"></app_btn>
         <app_btn appBtnTitle="预约流程" color="#1976D2"></app_btn>
@@ -87,7 +87,7 @@
 
   export default {
     name: "appointment",
-    components: {app_btn, appBtnStaff,appAppoint},
+    components: {app_btn, appBtnStaff, appAppoint},
     data() {
       return {
         colors: [
@@ -112,6 +112,7 @@
         promptMsg: '',//提示消息
         timeout: 2000, //提示框消失时间
         propColor: 'success', //提示主题颜色
+        appointStatus: false, //改变弹框颜色
       }
     },
     //监听属性
@@ -150,6 +151,13 @@
         this.promptMsg = "暂时未开通此功能";
         this.propColor = '#DCE775';
         this.snackbar = true;
+      },
+      fastAppoint() {
+        this.appointStatus = !this.appointStatus;
+      },
+      //父子组件传值
+      closeDia(msg) {
+        this.appointStatus = false;
       }
     }
   }

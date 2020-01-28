@@ -71,7 +71,7 @@
                 <i>员工姓名:&nbsp;</i><strong>{{staffInfo[model].staffinfoName}}</strong>
               </div>
               <div></div>
-              <p style="width: 90%;"><strong>员工简介:&nbsp;</strong>{{staffInfo[model].staffinfoIntroduce}}</p>
+              <p style="width: 90%; height: 50%; overflow: hidden;"><strong>员工简介:&nbsp;</strong>{{staffInfo[model].staffinfoIntroduce}}</p>
               <div>
                 <span>点个赞再走吧</span>
                 <v-rating
