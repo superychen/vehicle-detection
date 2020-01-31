@@ -8,7 +8,7 @@
       >
         <v-row>
           <v-col md="3">
-            <v-img width="150" height="80"  :src="src"></v-img>
+            <v-img width="150" height="80" :src="src"></v-img>
           </v-col>
           <v-col md="9">
             <h4>欢迎使用新型汽车检测系统</h4>
@@ -78,6 +78,7 @@
             v-model="password"
             :rules="passwordRules"
             label="密码"
+            type="password"
             required
           ></v-text-field>
 
@@ -149,7 +150,7 @@
         },
         src: 'http://img1.vued.vanthink.cn/vued0a233185b6027244f9d43e653227439a.png',
         likeWebsite: 0,
-        imgUrl:'',
+        imgUrl: '',
       }
     },
     methods: {
@@ -208,8 +209,9 @@
       imageuploaded(res) {
         console.log(res);
         if (res.code === 200) {
-          this.src = "http://" + res.data;
-          console.log(this.src);
+          this.src = this.$fastdfsUrl.fastdfs + res.data;
+          this.imgUrl = res.data[0];
+          console.log(this.imgUrl);
         }
       },
       closeDiaog() {

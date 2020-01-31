@@ -12,17 +12,17 @@
       </v-col>
       <v-col md="6">
         <v-text-field
-          v-model="localCity"
+          :value="cityName"
           label="地区"
           :disabled="true"
           required
         ></v-text-field>
       </v-col>
     </v-row>
-    <baidu-map class="bm-view" :center="localCity" :scroll-wheel-zoom="true">
+    <baidu-map class="bm-view" :center="cityName" :scroll-wheel-zoom="true">
       <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
       <bm-local-search :panel="false" :select-first-result="true" :keyword="keyword" :auto-viewport="true"
-                       :location="localCity"></bm-local-search>
+                       :location="cityName"></bm-local-search>
     </baidu-map>
 
     <v-btn
@@ -40,9 +40,10 @@
 
   export default {
     name: "appMap",
+    props: ['cityName', 'vehicleId'],
     data() {
       return {
-        localCity: '',
+        // localCity: '',
         keyword: '',
         keywordRules: [
           v => !!v || '详细地址不能为空',
@@ -59,14 +60,26 @@
       },
       //输入正确
       validate() {
-        this.$emit('changeStepper',4);
+        let _this = this;
+        if (_this._props.vehicleId === 0) {
+          this.$snackbar.info('请选择右上方的车牌号对应的车牌信息进行预约', '#9E9D24');
+          return false;
+        }
+        if (this.keyword.replace(/\s/g, "").length <= 5) {
+          this.$snackbar.info('请输入详细的地址', '#9E9D24')
+          return false;
+        }
+        console.log(_this._props.vehicleId);
+        // this.$axios.post('apis/')
+        this.$emit('appointAddress',this.keyword);
+        this.$emit('changeStepper', 4);
       }
     },
     created() {
       //定位自己的城市
-      setTimeout(() => {
-        this.getCurrentCity();
-      }, 3000);
+      // setTimeout(() => {
+      //   this.getCurrentCity();
+      // }, 3000);
     }
   }
 </script>

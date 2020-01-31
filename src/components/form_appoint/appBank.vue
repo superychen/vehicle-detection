@@ -131,20 +131,16 @@
           phoneNum: this.phoneNum,
           phoneCode: this.phoneCode,
         };
-        // this.$axios.post('apis/vehicle/vehicle/bank', vehicleInfo).then(res => {
-        //   console.log(res);
-        //   if (res.data.code === 200) {
-        //     this.$emit('changeStepper', 2);
-        //     this.$snackbar.info('银行卡4要素认证成功', '#26C6DA')
-        //   }
-        // }).catch(err => {
-        //   console.log(err);
-        // });
-
+        this.$axios.post('apis/vehicle/vehicle/bank', vehicleInfo).then(res => {
+          if (res.data.code === 200) {
+            this.$emit('changeStepper', 2);
+            this.$emit('bankRes',vehicleInfo);
+            this.$snackbar.info('银行卡4要素认证成功', '#26C6DA')
+          }
+        }).catch(err => {
+          console.log(err);
+        });
         //6222033100032328885
-        this.$emit('changeStepper', 2);
-        this.$emit('bankRes',vehicleInfo);
-        this.$snackbar.info('银行卡4要素认证成功', '#26C6DA');
       },
       reset() {
         this.$refs.form.reset()

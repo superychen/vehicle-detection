@@ -41,7 +41,7 @@
     </v-col>
     <v-col class="left_appointment ml-lg-5" :cols="12" md="5" lg="5" sm="5">
       <div id="fast_appointment" class="fast_appointment mx-auto" @click="fastAppoint">立即预约</div>
-      <app-appoint :appointStatus="appointStatus" @close-dialog="closeDia"></app-appoint>
+      <app-appoint :cityName="cityName" :appointStatus="appointStatus" @close-dialog="closeDia"></app-appoint>
       <v-row class="mt-5 ml-md-1 ml-lg-1">
         <app_btn appBtnTitle="工作流程" color="#1E88E5"></app_btn>
         <app_btn appBtnTitle="预约流程" color="#1976D2"></app_btn>
@@ -54,6 +54,8 @@
           <cn-region-picker
             v-model="pickCity"
             placeholder="城市"
+            :showCloseBtn="false"
+            @on-pick-city="chooseCity"
           >
           </cn-region-picker>
         </div>
@@ -108,6 +110,7 @@
         vehicle_adver_img: require('../../assets/img/vehicle333.jpg'),
         fastScreenWidth: '', // 对应fast_appointment的宽度
         pickCity: [], //城市选择器
+        cityName: '',//城市名
         snackbar: false, //提示框是否弹出
         promptMsg: '',//提示消息
         timeout: 2000, //提示框消失时间
@@ -153,12 +156,22 @@
         this.snackbar = true;
       },
       fastAppoint() {
-        this.appointStatus = !this.appointStatus;
+        if (this.pickCity.length === 1) {
+          this.cityName = this.pickCity[0].name;
+          this.appointStatus = !this.appointStatus;
+        } else if (this.pickCity.length > 1) {
+          this.$snackbar.info('只能选择一个城市哟!!', '#E6EE9C')
+        } else {
+          this.$snackbar.info('请选择一个城市', '#E6EE9C')
+        }
       },
       //父子组件传值
       closeDia(msg) {
         this.appointStatus = false;
-      }
+      },
+      chooseCity(val) {
+        this.pickCity = val;
+      },
     }
   }
 </script>
