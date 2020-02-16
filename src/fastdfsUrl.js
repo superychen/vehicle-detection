@@ -1,5 +1,5 @@
 let fastdfsUrl = {
-  fastdfs: 'http://192.168.124.5/'
+  fastdfs: 'http://192.168.0.110/'
 };
 
 export default fastdfsUrl

@@ -271,7 +271,6 @@
           imgUuid: imgUuid,
         })).then(res => {
           if (res.data.code === 200) {
-            console.log(res.data);
             //讲用户登录时的token存入到cookie中去，并且设置为1天之后过期
             this.$Cookies.set('token', res.data.data.jwt.access_token, {expires: 1});
             this.$Cookies.set('username',res.data.data.username,{expires: 1});

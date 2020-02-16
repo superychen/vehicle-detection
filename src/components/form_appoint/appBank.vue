@@ -56,7 +56,7 @@
     </v-btn>
 
     <v-btn
-      color="error"
+      color="error" 遮罩层
       class="mr-4"
       @click="reset"
     >
@@ -134,7 +134,7 @@
         this.$axios.post('apis/vehicle/vehicle/bank', vehicleInfo).then(res => {
           if (res.data.code === 200) {
             this.$emit('changeStepper', 2);
-            this.$emit('bankRes',vehicleInfo);
+            this.$emit('bankRes', vehicleInfo);
             this.$snackbar.info('银行卡4要素认证成功', '#26C6DA')
           }
         }).catch(err => {
@@ -158,6 +158,17 @@
           return false;
         }
         this.overlay = true;
+        this.$axios.post('apis/login-sms/comm/sms', this.$qs.stringify({
+          telephone: this.phoneNum
+        })).then(res => {
+          console.log(res.data);
+          if (res.data.code === 200) {
+            this.overlay = false;
+            this.$snackbar.info('发送短信成功', '#42A5F5');
+          }
+        }).catch(err => {
+          console.log(err);
+        });
         setTimeout(() => {
           this.overlay = false;
           this.sendMessage = true;
